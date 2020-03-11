@@ -5,7 +5,7 @@
     <title>Serre Michelin</title>
     <style media="screen">
     * {
-      font-family: 'helvetica';
+      font-family: 'helvetica', sans-serif;
       margin: 0px;
       padding: 0px;
     }
@@ -31,6 +31,10 @@
       margin: 80px;
       color: white;
       font-size: 2em;
+    }
+    h3{
+      color: #fff;
+      font-size: 5em;
     }
     header{
       margin-top: 30px;
@@ -58,7 +62,8 @@
     .btn {
       margin-bottom: 100px;
     }
-    .btn a {
+    .btn a, .btn p {
+      cursor: pointer;
       display: block;
       margin: 0px 20px;
       background-color: #e1b12c;
@@ -70,10 +75,10 @@
       border-radius: 5px;
       box-shadow: 5px 5px 10px rgba(0, 0, 0, .5);
     }
-    .btn a:active, .btnStop a:active {
+    .btn a:active, .btnStop a:active, .btn p:active, .btnStop p:active {
       background-color: #f2c23d;
     }
-    .btn a:focus {
+    .btn a:focus, .btn p:focus {
       color: #1B9CFC;
     }
     .menu {
@@ -101,6 +106,9 @@
     .bibFooter{
       width: 20%;
     }
+    .countdown{
+      text-align: center;
+    }
 
     footer{
       margin-top: 120px;
@@ -123,12 +131,14 @@
     <section class="menu">
       <article class="column">
         <h2>Show 1</h2>
-        <p class="btn"><a href="/?Start1\">Start</a></p>
+        <div class="btn"><p onclick="countdown(10.66, 'clockdiv');">Start</p></div>
+        <!--<p class="btn"><a href="/?Start1\">Start</a></p>-->
         <p class="btn"><a href="/?Boucle1\">Boucle</a></p>
       </article>
       <article class="column">
         <h2>Show 2</h2>
-        <p class="btn"><a href="/?Start2\">Start</a></p>
+        <div class="btn"><p onclick="countdown(8.33, 'clockdiv2');">Start</p></div>
+        <!--<p class="btn"><a href="/?Start2\">Start</a></p>-->
         <p class="btn"><a href="/?Boucle1\">Boucle</a></p>
       </article>
       <article class="column">
@@ -140,9 +150,54 @@
       <article class="stop">
         <p class="btnStop"><a href="/?Stop1\">Stop</a></p>
       </article>
+      <div id=show1 class="countdown">
+        <div id="clockdiv"> </div>
+      </div>
+      <div id=show2 class="countdown">
+        <div id="clockdiv2"> </div>
+      </div>
+
 
     </div>
     <footer><img class="bibFooter" src="img/logoMichelin.svg" alt="Logo de Michelin"><img src="img/logoAS.png" alt="Logo d'Audio Soft"></footer>
+
+    <script type="text/javascript">
+    function countdown(timeShow, div) {
+      //document.getElementById(showNone).style.display = none;
+      //document.getElementById(showOpen).style.display = block;
+
+
+
+    var time_in_minutes = timeShow;
+    var current_time = Date.parse(new Date());
+    var deadline = new Date(current_time + time_in_minutes*60*1000);
+
+
+    function time_remaining(endtime){
+      var t = Date.parse(endtime) - Date.parse(new Date());
+      var seconds = Math.floor( (t/1000) % 60 );
+      var minutes = Math.floor( (t/1000/60) % 60 );
+      var hours = Math.floor( (t/(1000*60*60)) % 24 );
+      var days = Math.floor( t/(1000*60*60*24) );
+      return {'total':t, 'days':days, 'hours':hours, 'minutes':minutes, 'seconds':seconds};
+    }
+    function run_clock(id,endtime){
+      var clock = document.getElementById(id);
+      function update_clock(){
+        var t = time_remaining(endtime);
+        clock.innerHTML = '<h3>'+t.minutes+':'+t.seconds + '</h3>';
+        if(t.total<=0){ clearInterval(timeinterval); }
+      }
+      update_clock(); // run function once at first to avoid delay
+      var timeinterval = setInterval(update_clock,1000);
+    }
+    run_clock(div,deadline);
+
+    }
+    console.log("Yo");
+
+
+    </script>
 
   </body>
 </html>
